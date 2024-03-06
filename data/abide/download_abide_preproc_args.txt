@@ -1,0 +1,5 @@
+Here are the commandline args I used for running download_abide_preproc.py:
+
+-d reho -p cpac -s nofilt_noglobal
+
+(You will need to set your own -o path)

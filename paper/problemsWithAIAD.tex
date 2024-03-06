@@ -1,0 +1,153 @@
+\documentclass[letterpaper]{article}
+
+% Compile script for MS powershell:
+% pdflatex problemsWithAIAD ; biber problemsWithAIAD ; pdflatex problemsWithAIAD ; pdflatex problemsWithAIAD
+
+\usepackage{color,soul}
+\usepackage{indentfirst}
+\usepackage{hyperref}
+\usepackage{censor}
+
+% \usepackage{setspace}
+% \doublespacing
+
+\usepackage[sorting=nyt, style=numeric]{biblatex}
+
+\addbibresource{aiadBib.bib}
+
+\title{On the Dangers of Autism Automation}
+\author{Noah Duggan Erickson}
+\date{6 March 2024}
+
+\begin{document}
+\maketitle
+
+{\Huge \centering DRAFT}
+
+\section*{Acknowledgements}
+\begin{itemize}
+    \item The title of this paper is borrowed from \textit{On the Dangers of Stochastic Parrots} \cite{stopar} and \textit{Automating autism} \cite{auto}, two papers that have substantially shaped the development of this paper and whose work I hope to build on.
+    \item Many thanks to Professor Kristen Chmielewski of the College of Humanities and Social Sciences at Western Washington University and Professor Brian Hutchinson of WWU's College of Science and Technology for creating the learning environment that allowed the development of this paper.
+    \item Many thanks to the multitude of faculty, staff, student peers, and others who reviewed this paper and advised on its development.
+\end{itemize}
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction}
+In \textit{Automating autism} \cite{auto}, Keyes analyzes two distinct corpora using a Critical Discourse Analysis-based approach to arrive at a set of themes pertaining to the sentiment towards autistic people both in academic research and in the commercial space. In my previous work, \hl{[C2C202B PAPER TITLE HERE]}, I analyzed the current flaws in the workforce sentiment towards autism and neurodiversity in post-secondary employment.
+
+In the present paper, I focus on a more fundamental issue: the genesis of how autism is defined “under a 'medical' model of disability” \cite[p.~2]{auto}, subsequent issues stemming from the major flaws in this definition, and the implications of this systemic bias in the present development of AI and machine learning models to diagnose the disorder.
+
+\hl{[TODO: Rebuild to make more specific (as a function of development)]}
+
+\section{The Genesis of Autism}
+\subsection{Following the Footnote Trail}
+% The first known description of autism in popular literature comes from... \hl{[TODO: Follow Mindblindness citation trail]}
+The term "autism" was first coined by Eugen Bleuler in 1913 to describe schizophrenic patients \cite[p.~213]{eyal}. Specifically, Bleuler dubbed "autism" to refer to a state where one "[seems] totally detached from the outside world ... and basking in fantasy"\cite[p.~213]{eyal}\footnote{aka "zoning out"/"daydreaming"?}. However, the history of autism as a syndrome as opposed to Bleuler's symptom begins some 30 years later with the near-simultaneous descriptions by Leo Kanner in 1943 and Hans Asperger in 1944. The latter's penning of "autistic psychopathy" adapted the original description by framing it as "a durable way of being..., a different kind of contact with [the world]"\cite[p.~213]{eyal} in response to the rising popularity of intelligence testing in 1930s Vienna. Kanner's "infantile autism" on the other hand, waivered from this definition by incorporating psychogenesis and mental r\censor{etard}ation \cite[p.~215]{eyal}.
+
+Division between the two descriptions would then deepen further following the 1971 publication of \cite{vk} which created a sharp split between them, noting that Asperger's description "did not receive the attention it deserves" \cite{vk}. Furthermore, the split aligned with Kanner's desire\footnote{Kanner was an editor for the journal in which \cite{vk} was published.} to restrict autism to "a rare and unique disorder" fearing that Asperger's description would "[water] down autism", thus "[depriving] the category of any relevance" \cite[p.~216]{eyal}.
+
+% \hl{THIS LINE MARKS THE "PAUSE POINT" BETWEEN TWO WRITING SESSIONS!}
+
+However, \cite{vk} represents something \textit{far} more significant than creating this divide - one of many introductions of Asperger's work to English-reading "researchers" \cite[pp.~216-7]{eyal}. This debunks the common myth, perpetuated in \cite{diff}, that Asperger's work was unknown to the English world until 1981 (or in the case of \cite{diff}, 1997) \cite[p.~216]{eyal}. Rather, the latency in adoption of Asperger's work stems from an "inability to synthesize [Asperger's] and Kanner's descriptions" \cite[p.~222]{eyal}. 
+
+% something deciedly as odds with Simon Baron-Cohen's 2003 book \textit{The Essential Difference}, which claims that Asperger's work did not reach the English world until 1997 \cite{diff} \hl{[PAGE NO CITE]}. Simon Baron-Cohen's own previous work, the 1995 book \textit{Mindblindness} \cite{mb}, lends further proof to the presence of Asperger's work in English-reading circles by creating a separation between two different "types" of autism based on \hl{[QUOTE]}. 
+
+This carries over into the present popular and academic conceptualization of autism, presented in Simon Baron-Cohen's 1995 book \textit{Mindblindness} \cite{mb} and his 2003 book \textit{The Essential Difference} \cite{diff}, particularly chapter 10 \cite[p.~12]{auto}. The latter posits that autism can be described as possessing “the extreme male brain” since the systematization ability of autistic people is enhanced whereas their empathy capabilities are significantly hampered \hl{[REPLACE WITH QUOTE]}. This lack of empathy is described in the former as an inability to “come up with a sensible interpretation of the causes of [others'] actions” \cite[p.~4]{mb}, and is likened to the social ineptitude \hl{[TODO: word choice]} of primates, an excerpt of this comparison being shown in Table~\ref{tab:mb}.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|cccc}
+        group & ID & EDD & SAM & ToMM\\
+        \hline
+        autism (A) & + & + & - & -\\
+        autism (B) & + & + & + & -\\
+        higher primates & + & + & +? & -\\
+        normal humans older than 4 years & + & + & + & +\\
+    \end{tabular}
+    \caption{Excerpt of table 8.1 on pg. 127 of \cite{mb}}\label{tab:mb}
+\end{table}
+
+Baron-Cohen's ideas were then applied to “theory and philosophy ... implying that the default state for autists is total ignorance of self” \cite[p.~13]{auto}. This and subsequent logical leaps were taken through \hl{[STUFF]} to arrive at the present construction of autism: robotic, asocial, non-agentic, and ultimately, non-human \cite[pp.~14-5]{auto}.
+
+\subsection{Disability and Dis-humanity in Antiquity}
+While derivatives of Baron-Cohen's works popularized the dehumanization of autism, the first belittlement of disability dates back significantly further to the ancient Greek philosopher Plato's work, \textit{Phaedo}. According to the interpretation on page 145 of \textit{Gendering Disability} \cite{gendering}, disability presents a severe impediment to philosophy. Since the healthy body is a source of “innumerable distractions” in the pursuit of knowledge, the bodily unpredictability of disability compounds this, halting philosophical progress altogether. Virginia Woolf's 1930 essay \textit{On Being Ill} applies this to literature since both “[aspire] to transcendence”, thus “in illness, the body demands acknowledgement” \cite{gendering}.
+
+\hl{[TODO: Trace to/from Mayes on the dehumanizing nature of SPED, same with Van Osdol 1976?]}
+
+\section{Real Harms of Contemporary Definitions}
+Arguably, \cite{vk} marks the division between what is considered today the distinction between "low-functioning" and "high-functioning" autistic people, perpetuated by the "autism (A)" and "autism (B)" sub-grouping in Table~\ref{tab:mb}.
+
+\hl{[Need to develop DDA above before connecting these ideas]}
+
+Perpetuating these overtly harmful narratives of disability as sub-human indisputably have real and profound impacts on the construction of social hierarchy. In the case of invisible disabilities \hl{[FOOTNOTE]}, the predominant consequences of this are two-fold: concealment of otherness and denial of support.
+
+\subsection{Masking}
+The practice of concealing one's disabilities and creating a facade of normativity, frequently called “masking”, is not a new concept despite its recent growth in popularity alongside the neurodiversity movement. One such example comes from \textit{Gendering Disability} \cite{gendering}, which highlights the concealment efforts of US male polio survivors to reach for the WWII-based imagery of masculinity, and the toll it took on their minds and bodies both in the short term and later in life.
+
+Similarly, \hl{[SOURCE]} lays out the implications of autistic masking, including anxiety, fatigue, and depression. \hl{[EXPAND THIS PARAGRAPH]}
+
+\hl{[I kinda want to shoehorn a footnote somewhere here about my recent use of crutches, but not 100\% sure if/where to put it...]}
+
+% \subsection{Disclosure}
+% % \hl{[REFER TO C2C202B PAPER SOURCES]}
+% \hl{(Note: this subsection gets personal, and is thus not as well-referenced)}
+
+% In the case that one is able to adequately \hl{[TODO: word choice]} "[simulate] normativity" (\cite{auto}, pg. 16), a host of new problems arise: the disclosure dilemma. 
+
+\subsection{Support}
+\hl{[REFER TO C2C202B PAPER SOURCES]}
+
+
+
+\section{The State of AI-assisted Autism Diagnosis}
+
+This section serves as an introduction to the current research area of AI-driven autism diagnosis.
+
+\subsection{AI Ethics}
+This subsection builds on Keyes' \cite{auto} description of present AI Ethics techniques, with emphasis on “bias detection algorithms”, thus implicating \textit{Stochastic Parrots} \cite{stopar}.
+
+\subsection{General Issues in AI Bias}
+This subsection builds on the \textit{Stochastic Parrots} \cite{stopar} implication above, highlighting section 4.3's (pg. 614) statement that AI bias towards intersectionality is greater than the sum of the bias towards its parts.
+
+\subsection{Going Too Far}
+By Baron-Cohen's own admission, autistic traits cannot reliably be measured in toddlers younger than 18 months. I feel like I've seen AIAD studies that target children younger than that. This subsection investigates the validity of that statement and the corpus thereof.
+
+\subsection{Issues in AIAD Research}
+This subsection summarizes the previous subsections in this section, providing an overview of the major issues in AIAD research. 
+
+\section{Evaluating the Present AIAD Corpus}
+% This section presents a systematic review of current AIAD publications available on EBSCO. The following characteristics are to be pulled from each article: Who is the “participant”? Who fills out the data collection? What socioeconomic and/or biological factors are considered? Types of model(s) used, results, and significance of classifiers.
+In the present research surrounding the use of AI in autism detection and diagnosis, there appear to be two major "tracks" that research follows: optimization of behavioral assessment and analysis of brain imaging. These methods are discussed in turn below.
+
+\subsection{Behavioral Assessment}
+
+\subsection{Neural Imaging}
+The second major track that AIAD research follows is that of detecting structural differences in autistic versus non-autistic brains through the use of EEG and MRI scanning. \cite{mri} provides an "excellent" overview of the work in this track. Here is a list of reasons why \cite{mri} is so "amazing":
+\begin{itemize}
+    \item Directly mentions Kanner; ASD related to the brain
+    \item Autism is this horrible epidemic that must be addressed at all costs!
+    \item "Unfortunately, this test-based screening method [ADOS] can only diagnose children when they have the ability to communicate." (pg. 2)
+    \item Genetic testing!
+    \item Cerebrospinal fluid increases within first two years of life correlates to ASD (pg. 3)
+    \item "The accuracy of a classifier/predictive model is improved by training the model on large datasets." (pg. 3) - uh... no... not necessarily... unless we're talking about overfitting...?
+\end{itemize}
+
+My thoughts:
+\begin{itemize}
+    \item HOW HAS THIS PAPER NOT BEEN RETRACTED!?!?!?!?!?!?
+    \item It looks like accuracy hovers in the 80s-percent range. Precision/recall scores?
+    \item Stop. Just. Stop. Sure, you might be able to detect autism with some degree of accuracy, but \textit{why}? Getting an MRI, (especially pediatrics?), isn't cheap...
+    \item Table 1 has repeated rows...?
+    \item This paper is so bad that I almost want to print it...
+\end{itemize}
+
+\section{Discussion}
+\subsection{Approaches to Autism Diagnosis}
+\subsection{Developing Benchmark Datasets}
+
+
+\newpage
+\printbibliography[heading=bibintoc, title={Bibliography}]
+\end{document}
