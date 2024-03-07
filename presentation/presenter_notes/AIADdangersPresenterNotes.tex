@@ -1,0 +1,70 @@
+\documentclass[twoside, letterpaper, twocolumn]{article}
+
+\title{Presenter Notes: On the Dangers of AI Autism Diagnosis}
+\author{Noah Duggan Erickson\thanks{Department of Computer Science, College of Science ant Technology, Western Washington University}}
+\date{7 March 2024}
+
+\begin{document}
+\maketitle
+\section{Overview 1}
+\begin{itemize}
+    \item Getting started
+    \item Technical, free to ask questions
+\end{itemize}
+\section{What is AIAD?}
+\begin{itemize}
+    \item Rigor involved in getting an ASD diagnosis
+    \item A rapidly growing field in machine learning research
+    \item EBSCO search for \texttt{AI (AND) Autism (AND) diagno*} gave 65 results: \textbf{20} of them are from \textbf{2023}, \textbf{10} from \textbf{2022}.
+    \item Trying\dots \textit{trying\dots} to employ various machine learning techniques in the detection of ASD
+\end{itemize}
+\section{Problems in General ML Research}
+\begin{itemize}
+    \item Taking a step back from AIAD for a second.
+    \item What are the problem areas in general ML research?
+    \item Models are growing faster than technology
+    \item Increasing model size means increasing scale of data needed
+    \item In the current hot topic of LLMs such as ChatGPT, where does the data come from? How is it filtered? What bias is intrinsic to the dataset? 
+    \item No such thing as a perfect filter. Demographics of who edits Wikipedia?
+    \item In a \textbf{2020 UW} study, GPT-2 produced toxic responses to \textit{at best} 17\% of innocuous prompts, even after the best ``conditioning'' the study performed.
+\end{itemize}
+\section{Disability Invisibility}
+\begin{itemize}
+    \item Won't spend too much time here\dots
+    \item Treatment of disabled as sub-human, lesser
+    \item In much of ML research, gender and race are frequently ``protected characteristics''. Disability often unmarked; \textit{maybe} a footnote.
+    \item Conventional AI bias metrics actively blind to ableism; ``fairness'', tying into WW-II masculinity(?)
+\end{itemize}
+\section{Defining Autism}
+\begin{itemize}
+    \item How is autism defined in society?
+    \item People who I shall not say their names aloud
+    \item Indirect inhumanity
+    \item AI ethics predicated on personhood; ``viable knowers''
+\end{itemize}
+\section{Current AIAD Literature}
+\begin{itemize}
+    \item What are researchers currently doing?
+    \item Two main tracks: the MRI/EEG-based approach, the behavioral approach, and their intersection.
+\end{itemize}
+\subsection{MRI}
+\begin{itemize}
+    \item Most studies use the ABIDE dataset, an aggregation of 3D MRI brain scans from various institutions.
+    \item The average from a 2021 review shows that the models ``get it correct'' about 78\% of the time.
+\end{itemize}
+\subsection{Behavioral}
+\begin{itemize}
+    \item Essentially trying to streamline traditional assessments
+    \item Perpetuating the same biases as those assessments
+\end{itemize}
+\subsection{Intersection}
+\begin{itemize}
+    \item Computer vision on stimming behaviors
+    \item eye tracking
+    \item NLP
+\end{itemize}
+\section{Problems in AIAD}
+\begin{itemize}
+    \item Conclusions, wrap up
+\end{itemize}
+\end{document}
