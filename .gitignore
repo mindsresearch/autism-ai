@@ -1,3 +1,9 @@
+## .nii.gz data files
+*.nii.gz
+
+## keras models
+*.keras
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
