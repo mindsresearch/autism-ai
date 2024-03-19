@@ -168,13 +168,13 @@ def collect_and_download(derivative, pipeline, strategy, out_dir, less_than, gre
             os.makedirs(download_dir)
         try:
             if not os.path.exists(download_file):
-                print('Retrieving: {0}'.format(download_file))
+                print('Retrieving: {0} ({1}/{2})'.format(download_file, path_idx+1, total_num_files))
                 request.urlretrieve(s3_path, download_file)
                 print('{0:3f}% percent complete'.format(100*(float(path_idx+1)/total_num_files)))
             else:
                 print('File {0} already exists, skipping...'.format(download_file))
         except Exception as exc:
-            print('There was a problem downloading {0}.\n Check input arguments and try again.'.format(s3_path))
+            print(f'There was a problem downloading {s3_path}.\n Check input arguments and try again.\nREASON: {exc}')
 
     # Print all done
     print('Done!')
