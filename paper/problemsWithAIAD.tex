@@ -17,7 +17,7 @@
 
 \title{On the Dangers of Autism Automation}
 \author{Noah Duggan Erickson}
-\date{6 March 2024}
+\date{21 March 2024}
 
 \begin{document}
 \maketitle
@@ -29,6 +29,7 @@
     \item The title of this paper is borrowed from \textit{On the Dangers of Stochastic Parrots} \cite{stopar} and \textit{Automating autism} \cite{auto}, two papers that have substantially shaped the development of this paper and whose work I hope to build on.
     \item Many thanks to Professor Kristen Chmielewski of the College of Humanities and Social Sciences at Western Washington University and Professor Brian Hutchinson of WWU's College of Science and Technology for creating the learning environment that allowed the development of this paper.
     \item Many thanks to the multitude of faculty, staff, student peers, and others who reviewed this paper and advised on its development.
+    \item All of the code and (small) data files can be found on this paper's GitHub repository at \href{github.com/mindsresearch/autism-ai}{github.com/mindsresearch/autism-ai}.
 \end{itemize}
 \newpage
 \tableofcontents
@@ -41,7 +42,7 @@ In the present paper, I focus on a more fundamental issue: the genesis of how au
 
 \hl{[TODO: Rebuild to make more specific (as a function of development)]}
 
-\section{The Genesis of Autism}
+\section{The Genesis of Autism} \label{sec:gen}
 \subsection{Following the Footnote Trail}
 % The first known description of autism in popular literature comes from... \hl{[TODO: Follow Mindblindness citation trail]}
 The term "autism" was first coined by Eugen Bleuler in 1913 to describe schizophrenic patients \cite[p.~213]{eyal}. Specifically, Bleuler dubbed "autism" to refer to a state where one "[seems] totally detached from the outside world ... and basking in fantasy"\cite[p.~213]{eyal}\footnote{aka "zoning out"/"daydreaming"?}. However, the history of autism as a syndrome as opposed to Bleuler's symptom begins some 30 years later with the near-simultaneous descriptions by Leo Kanner in 1943 and Hans Asperger in 1944. The latter's penning of "autistic psychopathy" adapted the original description by framing it as "a durable way of being..., a different kind of contact with [the world]"\cite[p.~213]{eyal} in response to the rising popularity of intelligence testing in 1930s Vienna. Kanner's "infantile autism" on the other hand, waivered from this definition by incorporating psychogenesis and mental r\censor{etard}ation \cite[p.~215]{eyal}.
@@ -69,35 +70,38 @@ This carries over into the present popular and academic conceptualization of aut
     \caption{Excerpt of table 8.1 on pg. 127 of \cite{mb}}\label{tab:mb}
 \end{table}
 
-Baron-Cohen's ideas were then applied to “theory and philosophy ... implying that the default state for autists is total ignorance of self” \cite[p.~13]{auto}. This and subsequent logical leaps were taken through \hl{[STUFF]} to arrive at the present construction of autism: robotic, asocial, non-agentic, and ultimately, non-human \cite[pp.~14-5]{auto}.
+Baron-Cohen's ideas were then applied to “theory and philosophy ... implying that the default state for autists is total ignorance of self” \cite[p.~13]{auto}. This and subsequent logical leaps were then taken through other works in popular science and medicine to arrive at the present construction of autism: robotic, asocial, non-agentic, and ultimately, non-human \cite[pp.~14-5]{auto}.
 
 \subsection{Disability and Dis-humanity in Antiquity}
 While derivatives of Baron-Cohen's works popularized the dehumanization of autism, the first belittlement of disability dates back significantly further to the ancient Greek philosopher Plato's work, \textit{Phaedo}. According to the interpretation on page 145 of \textit{Gendering Disability} \cite{gendering}, disability presents a severe impediment to philosophy. Since the healthy body is a source of “innumerable distractions” in the pursuit of knowledge, the bodily unpredictability of disability compounds this, halting philosophical progress altogether. Virginia Woolf's 1930 essay \textit{On Being Ill} applies this to literature since both “[aspire] to transcendence”, thus “in illness, the body demands acknowledgement” \cite{gendering}.
 
-\hl{[TODO: Trace to/from Mayes on the dehumanizing nature of SPED, same with Van Osdol 1976?]}
+% \hl{[TODO: Trace to/from Mayes on the dehumanizing nature of SPED, same with Van Osdol 1976?]}
+These notions of disability impeding human development are just as prevalent today, albeit in slightly more subtle ways. While special education (SPED) is presented as an exercise in inter-human empathy, its underpinning of something far darker are undeniable - attempting to ``train'' disability, particularly intellectual disability, out of children in order to force them into the capitalistic societal molds built specifically to exclude them. \hl{[SOURCES FOR THIS PARAGRAPH?]}
 
 \section{Real Harms of Contemporary Definitions}
-Arguably, \cite{vk} marks the division between what is considered today the distinction between "low-functioning" and "high-functioning" autistic people, perpetuated by the "autism (A)" and "autism (B)" sub-grouping in Table~\ref{tab:mb}.
+Arguably, \cite{vk} marks the division between what is considered today the distinction between "low-functioning" and "high-functioning" autistic people, perpetuated by the "autism (A)" and "autism (B)" sub-groupings in Table~\ref{tab:mb}. As we have explored in section~\ref{sec:gen}, this distinction stems from the differences between Kanner's and Asperger's descriptions of autism and the "inability to synthesize [their] descriptions" \cite[p.~222]{eyal}.
 
-\hl{[Need to develop DDA above before connecting these ideas]}
+Furthermore, this divide is perpetuated through the construction of SPED programs and classrooms \hl{[TODO: word choice]}. The curriculum of Life Skills, a form of SPED, focuses heavily on teaching the ``correct'' strategies for social skills and ``normal'' societal interaction. Some examples include the teaching of white middle-class \hl{[TODO: research history of table manners to verify this]} version of table manners without acknowledging those of other cultures, an allistic approach to friendships without the expression of authenticity\footnote{thus implicating the concept of ``masking'', or concealing autistic traits, which can cause substantial mental health issues}, and problem solving strategies that focus on minimizing reliance on adults.
+
+% \hl{[Need to develop DDA above before connecting these ideas]}
 
 Perpetuating these overtly harmful narratives of disability as sub-human indisputably have real and profound impacts on the construction of social hierarchy. In the case of invisible disabilities \hl{[FOOTNOTE]}, the predominant consequences of this are two-fold: concealment of otherness and denial of support.
 
-\subsection{Masking}
-The practice of concealing one's disabilities and creating a facade of normativity, frequently called “masking”, is not a new concept despite its recent growth in popularity alongside the neurodiversity movement. One such example comes from \textit{Gendering Disability} \cite{gendering}, which highlights the concealment efforts of US male polio survivors to reach for the WWII-based imagery of masculinity, and the toll it took on their minds and bodies both in the short term and later in life.
+% \subsection{Masking}
+% The practice of concealing one's disabilities and creating a facade of normativity, frequently called “masking”, is not a new concept despite its recent growth in popularity alongside the neurodiversity movement. One such example comes from \textit{Gendering Disability} \cite{gendering}, which highlights the concealment efforts of US male polio survivors to reach for the WWII-based imagery of masculinity, and the toll it took on their minds and bodies both in the short term and later in life.
 
-Similarly, \hl{[SOURCE]} lays out the implications of autistic masking, including anxiety, fatigue, and depression. \hl{[EXPAND THIS PARAGRAPH]}
+% Similarly, \hl{[SOURCE]} lays out the implications of autistic masking, including anxiety, fatigue, and depression. \hl{[EXPAND THIS PARAGRAPH]}
 
-\hl{[I kinda want to shoehorn a footnote somewhere here about my recent use of crutches, but not 100\% sure if/where to put it...]}
+% % \hl{[I kinda want to shoehorn a footnote somewhere here about my recent use of crutches, but not 100\% sure if/where to put it...]}
 
-% \subsection{Disclosure}
-% % \hl{[REFER TO C2C202B PAPER SOURCES]}
-% \hl{(Note: this subsection gets personal, and is thus not as well-referenced)}
+% % \subsection{Disclosure}
+% % % \hl{[REFER TO C2C202B PAPER SOURCES]}
+% % \hl{(Note: this subsection gets personal, and is thus not as well-referenced)}
 
-% In the case that one is able to adequately \hl{[TODO: word choice]} "[simulate] normativity" (\cite{auto}, pg. 16), a host of new problems arise: the disclosure dilemma. 
+% % In the case that one is able to adequately \hl{[TODO: word choice]} "[simulate] normativity" (\cite{auto}, pg. 16), a host of new problems arise: the disclosure dilemma. 
 
-\subsection{Support}
-\hl{[REFER TO C2C202B PAPER SOURCES]}
+% \subsection{Support}
+% \hl{[REFER TO C2C202B PAPER SOURCES]}
 
 
 
@@ -142,6 +146,10 @@ My thoughts:
     \item Table 1 has repeated rows...?
     \item This paper is so bad that I almost want to print it...
 \end{itemize}
+
+\section{Replicating Results} \label{sec:repres}
+\subsection{Behavioral Assessment}
+\subsection{Neural Imaging}
 
 \section{Discussion}
 \subsection{Approaches to Autism Diagnosis}
