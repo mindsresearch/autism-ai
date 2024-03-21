@@ -8,7 +8,7 @@ from tqdm import tqdm
 from sklearn.model_selection import train_test_split
 import pandas as pd
 
-NIIROOT = 'nyu_niigz/'
+NIIROOT = 'niigz_nyu_data/'
 CSVPATH = 'subject_data.csv'
 niipaths = []
 for root, dirs, files in os.walk(NIIROOT):
@@ -16,7 +16,7 @@ for root, dirs, files in os.walk(NIIROOT):
         if file.endswith('.gz'):
             niipaths.append((root, file))
 
-data = [(p[1][:-12], nib.load(os.path.join(p[0], p[1])).get_fdata()) for p in tqdm(niipaths, desc='load')]
+data = [(p[1][:-12], (nib.load(os.path.join(p[0], p[1])).get_fdata())/256) for p in tqdm(niipaths, desc='load')]
 df = pd.read_csv(CSVPATH)
 
 y = np.array([[list(df[df['FILE_ID'] == x[0]]['DX_GROUP'])[0]-1 for x in tqdm(data, desc='pain')]]).T
@@ -79,7 +79,10 @@ flse_neg = tf.keras.metrics.FalseNegatives(name='fn')
 
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['acc', 'f1_score', true_pos, true_neg, flse_pos, flse_neg])
 print(type(X_tr))
-model.fit(x=X_tr, y=y_tr, epochs=2, batch_size=1, validation_data=(X_dv,y_dv), verbose=1)
+model.fit(x=X_tr, y=y_tr, epochs=5, batch_size=1, validation_data=(X_dv,y_dv), verbose=1)
 
-#print(model.predict(X_dv))
-model.save('cnn_1.keras')
+print("pred dv:")
+print(model.predict(X_dv))
+print("pred tr:")
+print(model.predict(X_tr))
+#model.save('cnn_1.keras')
