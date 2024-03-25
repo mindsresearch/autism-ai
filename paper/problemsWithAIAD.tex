@@ -17,7 +17,7 @@
 
 \title{On the Dangers of Autism Automation}
 \author{Noah Duggan Erickson}
-\date{21 March 2024}
+\date{25 March 2024}
 
 \begin{document}
 \maketitle
@@ -107,16 +107,29 @@ Furthermore, this divide is perpetuated through the construction of SPED program
 
 \section{The State of AI-assisted Autism Diagnosis}
 
-AI-assisted Autism diagnosis (AIAD) is a rapidly growing field in machine learning research, motivated by the perception that present autism diagnosis methods are unnecessarily arduous. Researchers therefore seek to employ AI models and other machine learning techniques in the pursuit of streamlining the diagnostic process by identifying additional diagnostic modalities. However, the methods being explored frequently involve the collection and processing of vast quantities of data requiring similarly vast and powerful ML models.
+AI-assisted Autism diagnosis (AIAD) is a rapidly growing field in machine learning research, motivated by the perception that present autism diagnosis methods are unnecessarily arduous. Researchers therefore seek to employ AI models and other machine learning techniques in the pursuit of streamlining the diagnostic process by identifying additional diagnostic modalities or adjusting existing modalities.
+
+However, the bedrock and foundations of how AI research is set up to handle the ethical considerations when working with disabled populations are frequently severely lacking. A 2019 review of AI ethics publications found that of the nearly 1700 article abstracts reviewed by the study, only eleven of them contained keywords linked to disability~\cite{ethics}. 
+% However, the methods being explored frequently involve the collection and processing of vast quantities of data requiring similarly vast and powerful ML models.
 
 \subsection{AI Ethics}
 % This subsection builds on Keyes' \cite{auto} description of present AI Ethics techniques, with emphasis on “bias detection algorithms”, thus implicating \textit{Stochastic Parrots} \cite{stopar}.
-As AI models become increasingly larger, so too do the subtlety of the issues that they produce. As described in \cite{stopar}, which we look to as an example of the issues present in AI ethics and their potential consequences, increasing the scale of ML models fundamentally requires increased scale and breadth of data needed to attain ``decent'' performance. 
+% As AI models become increasingly larger, so too do the subtlety of the issues that they produce. As described in \cite{stopar}, which we look to as an example of the issues present in AI ethics and their potential consequences, increasing the scale of ML models fundamentally requires increased scale and breadth of data needed to attain ``decent'' performance.
+Understanding the rationale behind this lack of consideration is seemingly straightforward; gaining a deeper understanding is more complex.
+
+The straightforward answer is to point to the historical lack of consideration given to disabled people and consider this exclusionary attitude to simply be a ``natural extension/continuation'' \hl{[TODO: WORD CHOICE]} of this bias. This theory is further validated by the fact that the increasingly large and complex models being used in research fundamentally require additional training data to achieve higher accuracy metrics~\cite[p.~613]{stopar}.
+
 \subsection{General Issues in AI Bias}
-This subsection builds on the \textit{Stochastic Parrots} \cite{stopar} implication above, highlighting section 4.3's (pg. 614) statement that AI bias towards intersectionality is greater than the sum of the bias towards its parts.
+% This subsection builds on the \textit{Stochastic Parrots} \cite{stopar} implication above, highlighting section 4.3's (pg. 614) statement that AI bias towards intersectionality is greater than the sum of the bias towards its parts.
+
+For an example of how historical bias gets perpetuated in machine learning research, we turn to \cite{stopar}, which examines (among other things) the historical biases that are present and perpetuated in large language models (LLMs) such as ChatGPT. In these cases, the ``problematic characteristics''~\cite[p.~613]{stopar} of LLMs stem from the deceivingly uninclusive data sources that encode a fundamental WEIRD \hl{[CITE]} bias despite efforts to mitigate these shortcomings. This inability to mitigate the shortcomings of data collection methodologies comes from the aforementioned need for additional training data thus resulting in these strategies casting a wider net encompassing the ``low hanging fruit'' of internet-based platforms without consideration of their userbase.
 
 \subsection{Going Too Far}
-By Baron-Cohen's own admission, autistic traits cannot reliably be measured in toddlers younger than 18 months. I feel like I've seen AIAD studies that target children younger than that. This subsection investigates the validity of that statement and the corpus thereof.
+In the case of AIAD, one such way this need for increased data size manifests is in the inclusion of toddlers and other young children, pointing to the supposed benefits of early intervention. However, this fails to consider the increasing skepticism towards early intervention programs on the basis that they fail to embrace the growing neurodiversity movement~\cite{crossroads}.
+
+Furthermore, many of the present diagnostic methods require some form of communication with the child to a degree that may not be present even in a ``normal'' child of that age. One such metric that is frequently used for the early diagnosis of ASD is that of joint attention~\cite{kodak}. This is rooted in Baron-Cohen's criteria of autism which describes a ``shared attention mechanism'' (referred to as SAM in table~\ref{tab:mb}) that may be lacking in some autistic individuals.
+
+According to \cite{mb}, this SAM is usually fully developed by 18 months of age, with the ``ToMM'' developing by 4 years old. Therefore, attempting to use behavioral assessments between these two points risks failing to diagnose children with subgroup B autism. Despite this, a popular dataset used for the development of this type of AIAD model features a large amount of data from children in this age range, which we explore further in section~\ref{sec:repres}.
 
 \subsection{Issues in AIAD Research}
 This subsection summarizes the previous subsections in this section, providing an overview of the major issues in AIAD research. 
