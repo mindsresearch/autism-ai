@@ -15,7 +15,7 @@ from sklearn.metrics import accuracy_score
 #
 ARGSTR = '-c data/'
 
-parser = argparse.ArgumentParser(prog='first-model')
+parser = argparse.ArgumentParser(prog='rf-model')
 parser.add_argument('-c', help='path/to/csvs/')
 args = parser.parse_args(ARGSTR.split())
 
@@ -30,18 +30,26 @@ def enum_files(rootpath:str, ext:str='csv', blacklist:list=None) -> list:
                     fl.append(os.path.join(root, file))
     return fl
 
-# data loading and splitting...
+# data loading...
 #
 df = [pd.read_csv(path, true_values=['Yes', 'YES', 'yes'], false_values=['no', 'No', 'NO'], na_values=['?']) for path in enum_files(args.c)]
 df = pd.concat(df, ignore_index=True)
-df.drop(['Unnamed: 0', 'Age_Mons', 'Case_No', 'age_desc'], axis=1, inplace=True)
+
+# data pre-processing...
+#
+df.drop(['Unnamed: 0', 'Age_Mons', 'Case_No', 'age_desc', 'country_of_res'], axis=1, inplace=True)
+df['ethnicity'] = df['ethnicity'].str.lower().str.replace('-', ' ')
+df['relation'] = df['relation'].str.lower()
 df.replace({False: 0, True: 1}, inplace=True)
 y = df['class'].to_numpy()
-x = df.drop(['class', 'gender', 'ethnicity', 'contry_of_res', 'relation'], axis=1)
+x = df.drop(['class', 'gender', 'ethnicity', 'relation'], axis=1)
 ohe = OneHotEncoder()
-temp = ohe.fit_transform(df[['gender', 'ethnicity', 'contry_of_res', 'relation']]).toarray()
+temp = ohe.fit_transform(df[['gender', 'ethnicity', 'relation']]).toarray()
 temp = pd.DataFrame.from_records(temp, columns=ohe.get_feature_names_out())
 x = pd.concat([x, temp], axis=1)
+
+# data splitting...
+#
 x_tr, x_vl, y_tr, y_vl = tts(x, y, test_size=0.4)
 x_dv, x_te, y_dv, y_te = tts(x_vl, y_vl)
 print(f'--------\nDATA SHAPES:\n train: {x_tr.shape}\n   dev: {x_dv.shape}\n  test: {x_te.shape}\n--------')
@@ -50,6 +58,7 @@ print(f'--------\nDATA SHAPES:\n train: {x_tr.shape}\n   dev: {x_dv.shape}\n  te
 #
 # Model pipeline copied from: Shrivastava et al. (Mar. 2024)
 # DOI: 10.1007/s13755-024-00277-8
+
 tfrs = [('imputer', KNNImputer()),
         ('scaler', MinMaxScaler()),
         ('forest', RandomForestClassifier())
