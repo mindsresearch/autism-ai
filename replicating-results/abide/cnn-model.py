@@ -7,9 +7,13 @@ import numpy as np
 from tqdm import tqdm
 from sklearn.model_selection import train_test_split
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import io
 
-NIIROOT = '/media/noah/TOSHIBA EXT/Outputs/cpac/nofilt_noglobal/reho'
-CSVPATH = 'replicating-results/abide/subject_data.csv'
+NIIROOT = '/run/media/noah/TOSHIBA EXT/Outputs/cpac/nofilt_noglobal/reho'
+CSVPATH = 'subject_data.csv'
+MODELNO = '3-1'
 
 niipaths = []
 for root, dirs, files in os.walk(NIIROOT):
@@ -24,7 +28,7 @@ y = np.array([[list(df[df['FILE_ID'] == x[0]]['DX_GROUP'])[0]-1 for x in imgs]])
 
 X = [np.array(img[1].get_fdata()).astype(np.float32) for img in tqdm(imgs, desc='load data')]
 
-model = tf.keras.Sequential(name='abide_cnn')
+model = tf.keras.Sequential(name=f'abide_cnn_{MODELNO}')
 
 X_tr, X_vl, y_tr, y_vl = train_test_split(X, y, test_size=0.4, random_state=202410350)
 X_dv, X_te, y_dv, y_te = train_test_split(X_vl, y_vl, random_state=350202410)
@@ -78,6 +82,51 @@ class MeanPrediction(tf.keras.metrics.Metric):
     def result(self):
         return self.mean_prediction
 
+def plot_to_image(figure):
+    """Converts the matplotlib plot specified by 'figure' to a PNG image and
+    returns it. The supplied figure is closed and inaccessible after this call."""
+    # Save the plot to a PNG in memory.
+    buf = io.BytesIO()
+    plt.savefig(buf, format='png')
+    # Closing the figure prevents it from being displayed directly inside
+    # the notebook.
+    plt.close(figure)
+    buf.seek(0)
+    # Convert PNG buffer to TF image
+    image = tf.image.decode_png(buf.getvalue(), channels=4)
+    # Add the batch dimension
+    image = tf.expand_dims(image, 0)
+    return image
+
+logdir = f'/run/media/noah/TOSHIBA EXT/cnn_{MODELNO}_logs'
+# Define the basic TensorBoard callback.
+boarder = tf.keras.callbacks.TensorBoard(log_dir=logdir)
+file_writer_cm = tf.summary.create_file_writer(logdir + '/cm')
+
+def build_violin(epoch, logs):
+    # Use the model to predict the values from the validation dataset.
+    train_pred = np.array(model.predict(X_tr)).flatten()
+    dev_pred = np.array(model.predict(X_dv)).flatten()
+    g = np.repeat(['train','dev'],[len(y_tr), len(y_dv)])
+    df = pd.DataFrame({
+        'pred': np.concatenate([train_pred, dev_pred]),
+        'true': np.concatenate([np.array(y_tr).flatten(), np.array(y_dv).flatten()]),
+        'group': g
+        })
+
+    # Log the confusion matrix as an image summary.
+    vp = sns.violinplot(data=df, x='true', y='pred', hue='group', split=True, orient='v', inner=None)
+    vp.set_title(f'Epoch {epoch}')
+    fig = vp.get_figure()
+    v_image = plot_to_image(fig)
+
+    # Log the confusion matrix as an image summary.
+    with file_writer_cm.as_default():
+        tf.summary.image("epoch preds", v_image, step=epoch)
+
+# Define the per-epoch callback.
+violiner = tf.keras.callbacks.LambdaCallback(on_epoch_end=build_violin)
+
 bin_acc = tf.keras.metrics.BinaryAccuracy(name='acc')
 true_pos = tf.keras.metrics.TruePositives(name='tp')
 true_neg = tf.keras.metrics.TrueNegatives(name='tn')
@@ -87,7 +136,7 @@ flse_neg = tf.keras.metrics.FalseNegatives(name='fn')
 opt = tf.keras.optimizers.Adam(learning_rate=0.001)
 model.compile(optimizer=opt, loss='binary_crossentropy', metrics=[bin_acc, true_pos, true_neg, flse_pos, flse_neg, MeanPrediction()])
 
-checker = tf.keras.callbacks.ModelCheckpoint('/media/noah/TOSHIBA EXT/cnn_cp.keras', monitor='val_loss', verbose=1)
-model.fit(x=X_tr, y=y_tr, epochs=50, batch_size=1, validation_data=(X_dv,y_dv), verbose=1, callbacks=[checker])
+checker = tf.keras.callbacks.ModelCheckpoint(f'/run/media/noah/TOSHIBA EXT/cnn_{MODELNO}_cp.keras', monitor='val_loss', verbose=1, save_best_only=True, save_weights_only=False, save_freq='epoch')
+model.fit(x=X_tr, y=y_tr, epochs=50, batch_size=1, validation_data=(X_dv,y_dv), verbose=1, callbacks=[checker, boarder, violiner])
 
-model.save('/media/noah/TOSHIBA EXT/cnn.keras')
+model.save(f'/run/media/noah/TOSHIBA EXT/cnn_{MODELNO}.keras')
