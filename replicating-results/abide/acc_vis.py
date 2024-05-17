@@ -6,7 +6,7 @@ from scipy.ndimage import gaussian_filter1d
 
 # Path to csv of accuracies
 csv_path = '/run/media/noah/TOSHIBA EXT/cnn_3-1_accs.csv'
-sigma = 0.6
+sigma = 1
 
 df = pd.read_csv(csv_path)
 df = df.drop(columns=['Raw Train', 'Raw Dev', 'Raw OL'])
