@@ -1,24 +1,33 @@
 \documentclass[twoside, letterpaper, twocolumn]{article}
 
-\title{Presenter Notes: On the Dangers of AI Autism Diagnosis}
-\author{Noah Duggan Erickson\thanks{Department of Computer Science, College of Science ant Technology, Western Washington University}}
-\date{7 March 2024}
+\title{Presenter Notes: On the Dangers of AI Autism Diagnosis: ICDS Scholars Week 2024}
+\author{Noah Duggan Erickson\thanks{Department of Computer Science, College of Science and Technology, Western Washington University}}
+\date{17 May 2024}
 
 \begin{document}
 \maketitle
-\section{Overview 1}
+
+\section*{Thanks}
+Many thanks to the multitude of faculty who have lent a hand in this project.
+{\footnotesize
+\begin{itemize}
+    \item Dr. Kristen Chmielewski (CHSS/RML) for helping to get the project off the ground
+    \item Dr. Brian Hutchinson (CS) for his assistance with ML techniques
+    \item Heather Cochran M.Ed. (Woodring) for her guidance in the project
+\end{itemize}}
+\section{Overview}
 \begin{itemize}
     \item Getting started
     \item Technical, free to ask questions
+    \item Updates since presentation given in HNRS, added visuals \& ML progress
 \end{itemize}
 \section{What is AIAD?}
 \begin{itemize}
     \item Rigor involved in getting an ASD diagnosis
     \item A rapidly growing field in machine learning research
-    \item EBSCO search for \texttt{AI (AND) Autism (AND) diagno*} gave 65 results: \textbf{20} of them are from \textbf{2023}, \textbf{10} from \textbf{2022}.
+    \item Nexis search for \texttt{AI (AND) Autism (AND) diagno*} gave 96 results: \textbf{20} of them are from \textbf{2021}, \textbf{10} from \textbf{2022}.
     \item Trying\dots \textit{trying\dots} to employ various machine learning techniques in the detection of ASD
 \end{itemize}
-\newpage
 \section{Problems in General ML Research}
 \begin{itemize}
     \item Taking a step back from AIAD for a second.
@@ -29,6 +38,7 @@
     \item No such thing as a perfect filter. Demographics of who edits Wikipedia?
     \item In a \textbf{2020 UW} study, GPT-2 produced toxic responses to \textit{at best} 17\% of innocuous prompts, even after the best ``conditioning'' the study performed.
 \end{itemize}
+\newpage
 \section{Disability Invisibility}
 \begin{itemize}
     \item Won't spend too much time here\dots
@@ -46,23 +56,40 @@
 \section{Current AIAD Literature}
 \begin{itemize}
     \item What are researchers currently doing?
-    \item Two main tracks: the MRI/EEG-based approach, the behavioral approach, and their intersection.
+    \item A few main tracks, looking at two of them.
 \end{itemize}
-\subsection{MRI}
+\subsection{Description}
 \begin{itemize}
-    \item Most studies use the ABIDE dataset, an aggregation of 3D MRI brain scans from various institutions.
-    \item The average from a 2021 review shows that the models ``get it correct'' about 78\% of the time.
+    \item MRI
+    \begin{itemize}
+        \item Most studies use the ABIDE dataset, an aggregation of 3D and 4D MRI brain scans from various institutions.
+        \item 78\% accuracy from taking the average of a 2021 review
+        \item Variety of techniques, including CNNs and SVMs
+    \end{itemize}
+    \item Assessments
+    \begin{itemize}
+        \item Streamlining traditional assessments
+        \item Perpetuating the same biases as those assessments
+        \item Optimizing feature selection
+    \end{itemize}
 \end{itemize}
-\subsection{Behavioral}
+\subsection{CNN}
 \begin{itemize}
-    \item Essentially trying to streamline traditional assessments
-    \item Perpetuating the same biases as those assessments
+    \item Tensorflow/Keras implementation of the CNN from that paper
+    \item Paper claims X\% accuracy
+    \item Violin plot of predictions: Y-axis scale changes, but distributional equivalence remains.
+    \item Accuracy plot: Dev set volatile
+    \item Likely some sort of \texttt{nilearn} preprocessing I'm missing
 \end{itemize}
-\subsection{Intersection}
+\subsection{Random Forest}
 \begin{itemize}
-    \item Computer vision on stimming behaviors
-    \item eye tracking
-    \item NLP
+    \item \texttt{sklearn} implementation of the pipeline from that paper
+    \item Pipeline consists of KNN imputation of missing values, minmax scaling, and a random forest classifier
+    \item Serious issue with original paper: Included sum of A-scores feature, defeating the purpose.
+    \item Heavy selection bias, since existing assessments are used as the gold standard.
+    \item Due to internals of Gini importance, age importance is inflated.
+    \item Except yellow, colors represent one-hot groups
+    \item Except age, all features are binaries
 \end{itemize}
 \section{Problems in AIAD}
 \begin{itemize}
