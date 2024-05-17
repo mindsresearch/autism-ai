@@ -5,6 +5,7 @@ from matplotlib.patches import Patch
 from matplotlib import style
 import numpy as np
 import seaborn as sns
+from tqdm import tqdm
 
 import rf_model
 
@@ -24,7 +25,10 @@ if do_test.lower() == 'y':
     temp['predicted'] = p_te
     temp.to_csv('test_results.csv', index=True)
 
-    # Extract feature importances from the 'forest' step of your pipeline
+do_imp = input('Run feature importance? (y/n): ')
+
+if do_imp.lower() == 'y':
+    # Extract feature importances from the 'forest' step of the pipeline
     feature_importances = pipe.named_steps['forest'].feature_importances_
     features = x_tr.columns
 
@@ -42,21 +46,40 @@ if do_test.lower() == 'y':
     ax.grid(True, axis='x', linestyle='--', lw=0.5)
     sns.barplot(y=sorted_features, hue=colors, ax=ax, palette=cmap, x=sorted_importances, orient='h')
     plt.title('Feature Importance by Group')
-    # ax.set_yticks(range(len(sorted_importances)), sorted_features)
-    # ax.set_label('Relative Importance')
-
-    # Add a custom legend
-    # legend_elements = [
-    #     Patch(facecolor='#86C338', label='A-Scores'),
-    #     Patch(facecolor='#DA015C', label='Relation'),
-    #     Patch(facecolor='#0576C4', label='Gender'),
-    #     Patch(facecolor='#1590A8', label='Ethnicity'),
-    #     Patch(facecolor='#FECE01', label='Other')
-    # ]
-    # ax.legend(title='Data Groups', handles=legend_elements, loc='lower right')
-
-    # fig.gca().invert_yaxis()  # Invert axis to have the highest importance on top
     fig.tight_layout()
     fig.savefig('feature_importance.png')
 
+do_rep = input('Run repeated importances? (y/n): ')
 
+if do_rep.lower() == 'y':
+    import pandas as pd
+    imps = {}
+    n_iters = 50
+    for i in tqdm(range(n_iters)):
+        pipe, dataset = rf_model.create_model('data', verbose=False)
+        x_tr, y_tr = dataset['train']
+        features = x_tr.columns
+        feature_importances = pipe.named_steps['forest'].feature_importances_
+        for f, i in zip(features, feature_importances):
+            if f in imps:
+                imps[f].append(i)
+            else:
+                imps[f] = [i]
+    df = pd.DataFrame(imps)
+    df['run'] = [x+1 for x in range(n_iters)]
+    df = pd.melt(df, id_vars='run', var_name='feature', value_name='importance')
+
+    df['mean_importance'] = df.groupby('feature')['importance'].transform('mean')
+    df = df.sort_values('mean_importance', ascending=False)
+
+    df['group'] = ['A-Score' if 'Score' in f else 'Ethnic group' if 'ethnicity' in f else 'Examiner' if 'relation' in f else 'Gender' if 'gender' in f else 'Other' for f in df['feature']]
+    df.to_csv('repeated_importances.csv', index=True)
+
+    cmap = {'A-Score': '#86C338', 'Ethnic group': '#1590A8', 'Examiner': '#DA015C', 'Gender': '#0576C4', 'Other': '#FECE01'}
+    fig, ax = plt.subplots(figsize=(12, 8))
+    style.use('seaborn-v0_8-talk')
+    ax.grid(True, axis='x', linestyle='--', lw=0.5)
+    sns.barplot(data=df, x='importance', y='feature', hue='group', ax=ax, palette=cmap, orient='h', errorbar=('ci', 95))
+    ax.set_title('Feature Importance by Group (95% CI)')
+    fig.tight_layout()
+    fig.savefig('repeated_importances.png')

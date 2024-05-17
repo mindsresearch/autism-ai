@@ -21,7 +21,7 @@ def enum_files(rootpath:str, ext:str='csv', blacklist:list=None) -> list:
                     fl.append(os.path.join(root, file))
     return fl
 
-def create_model(data_path:str='data/'):
+def create_model(data_path:str='data/', verbose:bool=True):
     # data loading...
     #
     df = [pd.read_csv(path, true_values=['Yes', 'YES', 'yes'], false_values=['no', 'No', 'NO'], na_values=['?']) for path in enum_files(data_path)]
@@ -32,7 +32,7 @@ def create_model(data_path:str='data/'):
     df.drop(['Unnamed: 0', 'Age_Mons', 'Case_No', 'age_desc', 'contry_of_res', 'result', 'Qchat-10-Score'], axis=1, inplace=True)
     df['ethnicity'] = df['ethnicity'].str.lower().str.replace('-', ' ')
     df['relation'] = df['relation'].str.lower()
-    df.replace({False: 0, True: 1}, inplace=True)
+    df = df.replace({False: 0, True: 1})
     y = df['class'].to_numpy()
     x = df.drop(['class', 'gender', 'ethnicity', 'relation'], axis=1)
     ohe = OneHotEncoder()
@@ -44,7 +44,8 @@ def create_model(data_path:str='data/'):
     #
     x_tr, x_vl, y_tr, y_vl = tts(x, y, test_size=0.4, random_state=202410350)
     x_dv, x_te, y_dv, y_te = tts(x_vl, y_vl, random_state=350202410)
-    print(f'--------\nDATA SHAPES:\n train: {x_tr.shape}\n   dev: {x_dv.shape}\n  test: {x_te.shape}\n--------')
+    if verbose:
+        print(f'--------\nDATA SHAPES:\n train: {x_tr.shape}\n   dev: {x_dv.shape}\n  test: {x_te.shape}\n--------')
 
     # model creation
     #
@@ -57,7 +58,7 @@ def create_model(data_path:str='data/'):
             ('forest', RandomForestClassifier())
             ]
 
-    pipe = Pipeline(tfrs, verbose=True)
+    pipe = Pipeline(tfrs, verbose=verbose)
 
     # model run
     #
@@ -73,5 +74,6 @@ def create_model(data_path:str='data/'):
     cmt_dv = confusion_matrix(y_dv, p_dv)
 
     dataset = {'train': (x_tr, y_tr), 'dev': (x_dv, y_dv), 'test': (x_te, y_te)}
-    print(f'--------\nMODEL EVAL:\n TRAIN:\n  acc: {acc_tr}\n  conf. matrix:\n{cmt_tr}\n\n DEV:\n  acc: {acc_dv}\n  conf. matrix:\n{cmt_dv}\n--------')
+    if verbose:
+        print(f'--------\nMODEL EVAL:\n TRAIN:\n  acc: {acc_tr}\n  conf. matrix:\n{cmt_tr}\n\n DEV:\n  acc: {acc_dv}\n  conf. matrix:\n{cmt_dv}\n--------')
     return pipe, dataset
